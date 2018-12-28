@@ -133,7 +133,7 @@ class CheckSensuClient < Sensu::Plugin::Check::CLI
 
     aws_instances.delete_if do |instance|
       instance[:tags].any? do |key|
-        filter_list.keys.include?(key.key) && filter_list[key.key].split(',').any? do |v|
+        filter_list.keys?(key.key) && filter_list[key.key].split(',').any? do |v|
           key.value.match(/#{v.strip}/)
         end
       end

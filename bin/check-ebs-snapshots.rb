@@ -38,20 +38,20 @@ require 'aws-sdk'
 class CheckEbsSnapshots < Sensu::Plugin::Check::CLI
   include Common
   option :period,
-         short:       '-p N',
-         long:        '--period Days',
-         default:     7,
+         short: '-p N',
+         long: '--period Days',
+         default: 7,
          description: 'Length in time to alert on missing snapshots'
 
   option :aws_region,
-         short:       '-r R',
-         long:        '--region REGION',
+         short: '-r R',
+         long: '--region REGION',
          description: 'AWS region',
          default: 'us-east-1'
 
   option :check_ignored,
-         short:       '-i',
-         long:        '--ignore',
+         short: '-i',
+         long: '--ignore',
          description: 'mark as true to ignore volumes with an IGNORE_BACKUP tag',
          default: false,
          boolean: true
@@ -75,6 +75,7 @@ class CheckEbsSnapshots < Sensu::Plugin::Check::CLI
     volumes[:volumes].each do |volume|
       tags = volume[:tags].map { |a| Hash[*a] }.reduce(:merge) || {}
       next if config[:check_ignored] && tags.key?('IGNORE_BACKUP')
+
       snapshots = @ec2.describe_snapshots(
         filters: [
           {

@@ -13,7 +13,8 @@ This CHANGELOG follows the format listed [here](https://github.com/sensu-plugins
 
 ### Changed
 - updated runtime dep on sensu-plugin to '~>3.0`
-- updated runtime dep on rest0client to `2.0.2'
+- updated runtime dep on rest-client to `2.0.2'
+- updated dev dep on rubocop to `0.61.1'
 - updated spec-helper.rb for codeclimate-test-reporter 1.0
 - use runtime dep fog-aws (~> 3.3)  instead of fog, removing unused fog subpackages
 

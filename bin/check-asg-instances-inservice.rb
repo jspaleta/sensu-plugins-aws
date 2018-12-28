@@ -36,14 +36,14 @@ require 'aws-sdk'
 class CheckAsgInstancesInService < Sensu::Plugin::Check::CLI
   include Common
   option :aws_region,
-         short:       '-r AWS_REGION',
-         long:        '--aws-region REGION',
+         short: '-r AWS_REGION',
+         long: '--aws-region REGION',
          description: 'AWS Region (defaults to us-east-1).',
-         default:     ENV['AWS_REGION']
+         default: ENV['AWS_REGION']
 
   option :group,
-         short:       '-g G',
-         long:        '--autoscaling-group GROUP',
+         short: '-g G',
+         long: '--autoscaling-group GROUP',
          description: 'AutoScaling group to check'
 
   def asg

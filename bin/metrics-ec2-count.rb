@@ -111,11 +111,9 @@ class EC2Metrics < Sensu::Plugin::Metric::CLI::Graphite
       end
     end
 
-    unless data.nil? # rubocop: disable Style/GuardClause
-      # We only return data when we have some to return
-      data.each do |name, count|
-        output config[:scheme] + ".#{name}", count
-      end
+    # We only return data when we have some to return
+    data&.each do |name, count|
+      output config[:scheme] + ".#{name}", count
     end
   end
 

@@ -59,57 +59,57 @@ require 'time'
 
 class CheckRDS < Sensu::Plugin::Check::CLI
   option :aws_access_key,
-         short:       '-a AWS_ACCESS_KEY',
-         long:        '--aws-access-key AWS_ACCESS_KEY',
+         short: '-a AWS_ACCESS_KEY',
+         long: '--aws-access-key AWS_ACCESS_KEY',
          description: "AWS Access Key. Either set ENV['AWS_ACCESS_KEY'] or provide it as an option",
-         default:     ENV['AWS_ACCESS_KEY']
+         default: ENV['AWS_ACCESS_KEY']
 
   option :aws_secret_access_key,
-         short:       '-k AWS_SECRET_KEY',
-         long:        '--aws-secret-access-key AWS_SECRET_KEY',
+         short: '-k AWS_SECRET_KEY',
+         long: '--aws-secret-access-key AWS_SECRET_KEY',
          description: "AWS Secret Access Key. Either set ENV['AWS_SECRET_KEY'] or provide it as an option",
-         default:     ENV['AWS_SECRET_KEY']
+         default: ENV['AWS_SECRET_KEY']
 
   option :role_arn,
-         long:        '--role-arn ROLE_ARN',
+         long: '--role-arn ROLE_ARN',
          description: 'AWS role arn of the role of the third party account to switch to',
-         default:     false
+         default: false
 
   option :aws_region,
-         short:       '-r AWS_REGION',
-         long:        '--aws-region REGION',
+         short: '-r AWS_REGION',
+         long: '--aws-region REGION',
          description: 'AWS Region (defaults to us-east-1).',
-         default:     'us-east-1'
+         default: 'us-east-1'
 
   option :db_instance_id,
-         short:       '-i N',
-         long:        '--db-instance-id NAME',
+         short: '-i N',
+         long: '--db-instance-id NAME',
          description: 'DB instance identifier'
 
   option :db_cluster_id,
-         short:       '-l N',
-         long:        '--db-cluster-id NAME',
+         short: '-l N',
+         long: '--db-cluster-id NAME',
          description: 'DB cluster identifier'
 
   option :end_time,
-         short:       '-t T',
-         long:        '--end-time TIME',
-         default:     Time.now,
-         proc:        proc { |a| Time.parse a },
+         short: '-t T',
+         long: '--end-time TIME',
+         default: Time.now,
+         proc: proc { |a| Time.parse a },
          description: 'CloudWatch metric statistics end time'
 
   option :period,
-         short:       '-p N',
-         long:        '--period SECONDS',
-         default:     180,
-         proc:        proc(&:to_i),
+         short: '-p N',
+         long: '--period SECONDS',
+         default: 180,
+         proc: proc(&:to_i),
          description: 'CloudWatch metric statistics period'
 
   option :statistics,
-         short:       '-S N',
-         long:        '--statistics NAME',
-         default:     :average,
-         proc:        proc { |a| a.downcase.intern },
+         short: '-S N',
+         long: '--statistics NAME',
+         default: :average,
+         proc: proc { |a| a.downcase.intern },
          description: 'CloudWatch statistics method'
 
   option :accept_nil,
@@ -120,13 +120,13 @@ class CheckRDS < Sensu::Plugin::Check::CLI
 
   %w[warning critical].each do |severity|
     option :"availability_zone_#{severity}",
-           long:        "--availability-zone-#{severity} AZ",
+           long: "--availability-zone-#{severity} AZ",
            description: "Trigger a #{severity} if availability zone is different than given argument"
 
     %w[cpu memory disk connections iops].each do |item|
       option :"#{item}_#{severity}_over",
-             long:        "--#{item}-#{severity}-over N",
-             proc:        proc(&:to_f),
+             long: "--#{item}-#{severity}-over N",
+             proc: proc(&:to_f),
              description: "Trigger a #{severity} if #{item} usage is over a percentage"
     end
   end
@@ -253,6 +253,7 @@ class CheckRDS < Sensu::Plugin::Check::CLI
 
   def check_az(severity, expected_az)
     return if @db_instance.availability_zone == expected_az
+
     @severities[severity] = true
     "; AZ is #{@db_instance.availability_zone} (expected #{expected_az})"
   end
@@ -261,6 +262,7 @@ class CheckRDS < Sensu::Plugin::Check::CLI
     cpu_metric ||= cloud_watch_metric 'CPUUtilization', 'Percent'
     cpu_metric_value ||= latest_value cpu_metric
     return if cpu_metric_value < expected_lower_than
+
     @severities[severity] = true
     "; CPUUtilization is #{sprintf '%.2f', cpu_metric_value}% (expected lower than #{expected_lower_than}%)"
   end
@@ -272,6 +274,7 @@ class CheckRDS < Sensu::Plugin::Check::CLI
     memory_usage_bytes ||= memory_total_bytes - memory_metric_value
     memory_usage_percentage ||= memory_usage_bytes / memory_total_bytes * 100
     return if memory_usage_percentage < expected_lower_than
+
     @severities[severity] = true
     "; Memory usage is #{sprintf '%.2f', memory_usage_percentage}% (expected lower than #{expected_lower_than}%)"
   end
@@ -283,6 +286,7 @@ class CheckRDS < Sensu::Plugin::Check::CLI
     disk_usage_bytes ||= disk_total_bytes - disk_metric_value
     disk_usage_percentage ||= disk_usage_bytes / disk_total_bytes * 100
     return if disk_usage_percentage < expected_lower_than
+
     @severities[severity] = true
     "; Disk usage is #{sprintf '%.2f', disk_usage_percentage}% (expected lower than #{expected_lower_than}%)"
   end
@@ -291,8 +295,9 @@ class CheckRDS < Sensu::Plugin::Check::CLI
     connections_metric ||= cloud_watch_metric 'DatabaseConnections', 'Count'
     connections_metric_value ||= latest_value connections_metric
     return if connections_metric_value < expected_lower_than
+
     @severities[severity] = true
-    "; DatabaseConnections are #{sprintf '%d', connections_metric_value} (expected lower than #{expected_lower_than})"
+    "; DatabaseConnections are #{sprintf '%<value>d', value: connections_metric_value} (expected lower than #{expected_lower_than})"
   end
 
   def check_iops(severity, expected_lower_than)
@@ -302,8 +307,9 @@ class CheckRDS < Sensu::Plugin::Check::CLI
     write_iops_metric_value ||= latest_value write_iops_metric
     iops_metric_value ||= read_iops_metric_value + write_iops_metric_value
     return if iops_metric_value < expected_lower_than
+
     @severities[severity] = true
-    "; IOPS are #{sprintf '%d', iops_metric_value} (expected lower than #{expected_lower_than})"
+    "; IOPS are #{sprintf '%<value>d', value: iops_metric_value} (expected lower than #{expected_lower_than})"
   end
 
   def run
@@ -322,7 +328,7 @@ class CheckRDS < Sensu::Plugin::Check::CLI
     messages = ''
     severities = {
       critical: false,
-      warning:  false
+      warning: false
     }
     instances.each do |instance|
       @db_instance = instance
@@ -349,7 +355,7 @@ class CheckRDS < Sensu::Plugin::Check::CLI
     message = "\n#{instance[:db_instance_identifier]}: "
     @severities = {
       critical: false,
-      warning:  false
+      warning: false
     }
 
     @severities.each_key do |severity|

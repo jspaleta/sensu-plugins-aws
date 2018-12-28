@@ -1,3 +1,5 @@
+AllCops:
+  TargetRubyVersion: 2.3
 
 MethodLength:
     Max: 200
@@ -45,3 +47,10 @@ Style/ClassVars:
 Metrics/BlockLength:
   Exclude:
     - test/**/*.rb
+
+Layout/AlignHash:
+  EnforcedHashRocketStyle: table
+
+Style/NumericPredicate:
+  Enabled: false
+
