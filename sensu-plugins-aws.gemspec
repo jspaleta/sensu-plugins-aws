@@ -26,19 +26,16 @@ Gem::Specification.new do |s| # rubocop:disable Metrics/BlockLength
   s.platform               = Gem::Platform::RUBY
   s.post_install_message   = 'You can use the embedded Ruby by setting EMBEDDED_RUBY=true in /etc/default/sensu'
   s.require_paths          = ['lib']
-  s.required_ruby_version  = '>= 2.1.0'
+  s.required_ruby_version  = '>= 2.3.0'
   s.summary                = 'Sensu plugins for working with an AWS environment'
   s.test_files             = s.files.grep(%r{^(test|spec|features)/})
   s.version                = SensuPluginsAWS::Version::VER_STRING
 
-  s.add_runtime_dependency 'sensu-plugin',      '~> 2.0'
+  s.add_runtime_dependency 'sensu-plugin',      '~> 3.0'
 
   s.add_runtime_dependency 'aws-sdk',           '~> 3.0'
   s.add_runtime_dependency 'erubis',            '2.7.0'
-  s.add_runtime_dependency 'fog',               '1.32.0'
-  # 1.44 requires xmlrpc which only supports >= ruby 2.3
-  # https://github.com/fog/fog-core/issues/206
-  s.add_runtime_dependency 'fog-core',          '1.43.0'
+  s.add_runtime_dependency 'fog-aws',           '~> 3.3'
   s.add_runtime_dependency 'rest-client',       '1.8.0'
   s.add_runtime_dependency 'right_aws',         '3.1.0'
 
@@ -47,6 +44,7 @@ Gem::Specification.new do |s| # rubocop:disable Metrics/BlockLength
   s.add_development_dependency 'github-markup',             '~> 3.0'
   s.add_development_dependency 'pry',                       '~> 0.10'
   s.add_development_dependency 'rake',                      '~> 12.3'
+  s.add_development_dependency 'rdoc',                      '~> 6.0'
   s.add_development_dependency 'redcarpet',                 '~> 3.2'
   s.add_development_dependency 'rspec',                     '~> 3.4'
   s.add_development_dependency 'rubocop',                   '~> 0.51.0'

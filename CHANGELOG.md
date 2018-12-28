@@ -4,6 +4,16 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This CHANGELOG follows the format listed [here](https://github.com/sensu-plugins/community/blob/master/HOW_WE_CHANGELOG.md)
 
 ## [Unreleased]
+### Breaking Changes
+- dropped old ruby versions require minimum ruby of 2.3.0
+
+### Added
+- Added tests for check-elb-health-fog.rb
+
+### Changed
+- updated runtime dep on sensu-plugin to '~>3.0`
+- updated spec-helper.rb for codeclimate-test-reporter 1.0
+- use runtime dep fog-aws (~> 3.3)  instead of fog, removing unused fog subpackages
 
 ## [16.1.0] - 2018-11-02
 ### Changed
