@@ -137,6 +137,7 @@ class CheckS3Object < Sensu::Plugin::Check::CLI
   def run_check(type, level, value, element, msg)
     key = "#{level}_#{type}".to_sym
     return if config[key].nil?
+
     to_check = config[key].to_i
     send(level, msg % [element, value, config[:bucket_name]]) if operator.call type, value, to_check
   end

@@ -64,6 +64,7 @@ class CheckTrustedAdvisorServiceLimits < Sensu::Plugin::Check::CLI
         sl_region, sl_service, sl_description, sl_limit, sl_usage, sl_status = slr[:metadata]
 
         next if sl_status == 'Green'
+
         sl_usage = 0 if sl_usage.nil?
 
         sl_msg = "#{sl_service} (#{sl_region}) #{sl_description} #{sl_usage} out of #{sl_limit}"

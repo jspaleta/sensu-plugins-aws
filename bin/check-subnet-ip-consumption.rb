@@ -92,6 +92,7 @@ class CheckSubnetIpConsumption < Sensu::Plugin::Check::CLI
       iam_account_alias = iam_client.list_account_aliases[:account_aliases].first
 
       return '<no alias>' if iam_account_alias.empty? || iam_account_alias.nil?
+
       return iam_account_alias
     rescue StandardError => e
       unknown "An error occured while using AWS IAM to collect the account alias: #{e.message}"
@@ -115,12 +116,14 @@ class CheckSubnetIpConsumption < Sensu::Plugin::Check::CLI
   # Returns the subnet's friendly name if -f/--show-friendly-names is used, otherwise returns the ID
   def display_subnet(alert)
     return alert[:subnet_name] if config[:show_friendly_names]
+
     alert[:subnet_id]
   end
 
   # Returns the VPC's friendly name if -f/--show-friendly-names is used, otherwise returns the ID
   def display_vpc(alert)
     return alert[:vpc_friendly_name] if config[:show_friendly_names]
+
     alert[:subnet_vpc_id]
   end
 

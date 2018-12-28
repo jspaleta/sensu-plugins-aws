@@ -107,6 +107,7 @@ class CheckDynamoDB < Sensu::Plugin::Check::CLI
 
   def tables
     return @tables if @tables
+
     table_names = dynamo_db.list_tables.table_names.to_a
     table_names.select! { |table_name| config[:table_names].include? table_name } if config[:table_names]
     @tables = []
@@ -137,7 +138,7 @@ class CheckDynamoDB < Sensu::Plugin::Check::CLI
   end
 
   def latest_value(metric)
-    metric.datapoints.sort_by { |datapoint| datapoint[:timestamp] }.last[config[:statistics]]
+    metric.datapoints.max_by { |datapoint| datapoint[:timestamp] }[config[:statistics]]
   end
 
   def flag_alert(severity, message)
@@ -158,7 +159,9 @@ class CheckDynamoDB < Sensu::Plugin::Check::CLI
       @severities.each_key do |severity|
         threshold = config[:"#{severity}_over"]
         next unless threshold
+
         next if metric_value < threshold
+
         flag_alert severity, "; On table #{table.table_name} #{r_or_w.to_s.capitalize}ThrottleEvents is #{metric_value} (higher_than #{threshold})"
         break
       end

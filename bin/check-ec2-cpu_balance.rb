@@ -102,6 +102,7 @@ class EC2CpuBalance < Sensu::Plugin::Check::CLI
     instances.reservations.each do |reservation|
       reservation.instances.each do |instance|
         next unless instance.instance_type.start_with? 't2.'
+
         id = instance.instance_id
         result = data id
         tag = config[:tag] ? " (#{instance_tag(instance, config[:tag])})" : ''

@@ -96,11 +96,13 @@ class CheckS3Bucket < Sensu::Plugin::Check::CLI
 
   def excluded_bucket?(bucket_name)
     return false if config[:exclude_buckets].nil?
+
     config[:exclude_buckets].include?(bucket_name)
   end
 
   def excluded_bucket_regex?(bucket_name)
     return false if config[:exclude_regex_filter].nil?
+
     if bucket_name.match(Regexp.new(Regexp.escape(config[:exclude_regex_filter])))
       true
     else
@@ -125,8 +127,8 @@ class CheckS3Bucket < Sensu::Plugin::Check::CLI
     policy['Statement'].any? { |s| statement_too_permissive? s }
   end
 
-  def statement_too_permissive?(s)
-    actions_contain_get_or_list? Array(s['Action'])
+  def statement_too_permissive?(statement)
+    actions_contain_get_or_list? Array(statement['Action'])
   end
 
   def actions_contain_get_or_list?(actions)

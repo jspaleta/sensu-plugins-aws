@@ -35,7 +35,7 @@ class CheckEipAllocation < Sensu::Plugin::Check::CLI
   option :eips_allowed,
          short:       '-e EIPS_ALLOWED',
          long:        '--eips_allowed eip1,eip2',
-         required: 	  true,
+         required:    true,
          description: 'List of EIPs that are allowed to exist.  Comma seperated.'
 
   option :aws_region,

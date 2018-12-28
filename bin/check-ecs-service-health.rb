@@ -78,6 +78,7 @@ class CheckEcsServiceHealth < Sensu::Plugin::Check::CLI
   # List of requested services or all services registered to the cluster
   def service_list(cluster = 'default', services = nil)
     return services.split ',' if services
+
     collect_services(cluster)
   end
 

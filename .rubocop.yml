@@ -49,6 +49,7 @@ Metrics/BlockLength:
     - test/**/*.rb
 
 Layout/AlignHash:
+  Enabled: false
   EnforcedHashRocketStyle: table
 
 Style/NumericPredicate:

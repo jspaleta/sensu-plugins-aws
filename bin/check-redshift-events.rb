@@ -61,7 +61,7 @@ class CheckRedshiftEvents < Sensu::Plugin::Check::CLI
 
   # fetch all clusters in the region from AWS
   def all_clusters
-    @clusters ||= redshift.describe_clusters[:clusters].map { |c| c[:cluster_identifier] }
+    @all_clusters ||= redshift.describe_clusters[:clusters].map { |c| c[:cluster_identifier] }
   end
 
   # throw unknown message if the user passed us a missing instance

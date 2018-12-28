@@ -54,7 +54,7 @@ class CheckKMSKey < Sensu::Plugin::Check::CLI
   end
 
   def check_key(id)
-    return kms_client.describe_key(key_id: id)['key_metadata']['enabled']
+    kms_client.describe_key(key_id: id)['key_metadata']['enabled']
   rescue Aws::KMS::Errors::NotFoundException
     critical 'Key doesnt exist'
   rescue StandardError => e

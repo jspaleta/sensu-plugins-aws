@@ -6,7 +6,7 @@ module CloudwatchCommon
   end
 
   def read_value(resp, stats)
-    resp.datapoints.sort_by(&:timestamp).last.send(stats.downcase)
+    resp.datapoints.max_by(&:timestamp).send(stats.downcase)
   end
 
   def resp_has_no_data(resp, stats)

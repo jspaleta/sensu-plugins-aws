@@ -88,6 +88,7 @@ class CheckELBLatency < Sensu::Plugin::Check::CLI
 
   def elbs
     return @elbs if @elbs
+
     @elbs = elb.describe_load_balancers.load_balancer_descriptions.to_a
     @elbs.select! { |elb| config[:elb_names].include? elb.load_balancer_name } if config[:elb_names]
     @elbs
@@ -112,7 +113,7 @@ class CheckELBLatency < Sensu::Plugin::Check::CLI
   end
 
   def latest_value(metric)
-    metric.datapoints.sort_by { |datapoint| datapoint[:timestamp] }.last[config[:statistics]]
+    metric.datapoints.max_by { |datapoint| datapoint[:timestamp] }[config[:statistics]]
   end
 
   def flag_alert(severity, message)
@@ -132,6 +133,7 @@ class CheckELBLatency < Sensu::Plugin::Check::CLI
       threshold = config[:"#{severity}_over"]
       next unless threshold
       next if metric_value < threshold
+
       flag_alert severity,
                  "; #{elbs.size == 1 ? nil : "#{elb.load_balancer_name}'s"} Latency is #{sprintf '%.3f', metric_value} seconds. (expected lower than #{sprintf '%.3f', threshold})"
       break

@@ -67,7 +67,7 @@ class SESNotifier < Sensu::Handler
             Command:  #{@event['check']['command']}
             Status:  #{@event['check']['status']}
             Occurrences:  #{@event['occurrences']}
-          BODY
+    BODY
 
     subject = if @event['check']['notification'].nil?
                 "#{action_to_string} - #{event_name}: #{status_to_string}"

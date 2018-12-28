@@ -69,10 +69,10 @@ class SQSMetrics < Sensu::Plugin::Metric::CLI::Graphite
     "#{scheme}.#{queue_name.tr('-', '_')}.message_count"
   end
 
-  def record_queue_metrics(q_name, q)
-    output scheme(q_name), q.attributes['ApproximateNumberOfMessages'].to_i
-    output "#{scheme(q_name)}.delayed", q.attributes['ApproximateNumberOfMessagesDelayed'].to_i
-    output "#{scheme(q_name)}.not_visible", q.attributes['ApproximateNumberOfMessagesNotVisible'].to_i
+  def record_queue_metrics(q_name, que)
+    output scheme(q_name), que.attributes['ApproximateNumberOfMessages'].to_i
+    output "#{scheme(q_name)}.delayed", que.attributes['ApproximateNumberOfMessagesDelayed'].to_i
+    output "#{scheme(q_name)}.not_visible", que.attributes['ApproximateNumberOfMessagesNotVisible'].to_i
   end
 
   def run

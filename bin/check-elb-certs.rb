@@ -99,7 +99,7 @@ class CheckELBCerts < Sensu::Plugin::Check::CLI
             end
 
             cert_days_remaining = ((cert.not_after - Time.now) / 86_400).to_i
-            message = sprintf '%s(%d)', lb.load_balancer_name, cert_days_remaining
+            message = sprintf '%<name>s(%<days>d)', name: lb.load_balancer_name, days: cert_days_remaining
 
             if config[:crit_under] > 0 && config[:crit_under] >= cert_days_remaining
               critical_message << message
