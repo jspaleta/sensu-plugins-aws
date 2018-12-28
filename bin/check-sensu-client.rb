@@ -12,7 +12,7 @@
 #   Linux
 #
 # DEPENDENCIES:
-#   gem: aws-sdk
+#   gem: aws-sdk-ec2
 #   gem: sensu-plugin
 #
 # USAGE:
@@ -32,7 +32,7 @@
 
 require 'sensu-plugins-aws'
 require 'sensu-plugin/check/cli'
-require 'aws-sdk'
+require 'aws-sdk-ec2'
 require 'rest-client'
 require 'json'
 

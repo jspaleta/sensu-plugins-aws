@@ -9,9 +9,11 @@ This CHANGELOG follows the format listed [here](https://github.com/sensu-plugins
 
 ### Added
 - Added tests for check-elb-health-fog.rb
+- Added dev dep on rdoc (~> 6.0)
 
 ### Changed
 - updated runtime dep on sensu-plugin to '~>3.0`
+- updated runtime dep on rest0client to `2.0.2'
 - updated spec-helper.rb for codeclimate-test-reporter 1.0
 - use runtime dep fog-aws (~> 3.3)  instead of fog, removing unused fog subpackages
 

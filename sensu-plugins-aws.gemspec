@@ -34,9 +34,13 @@ Gem::Specification.new do |s| # rubocop:disable Metrics/BlockLength
   s.add_runtime_dependency 'sensu-plugin',      '~> 3.0'
 
   s.add_runtime_dependency 'aws-sdk',           '~> 3.0'
+  ##
+  # Begin to parse out specific aws-sdk subpackages to use
+  ##
+  s.add_runtime_dependency 'aws-sdk-ec2',       '~> 1.65'
   s.add_runtime_dependency 'erubis',            '2.7.0'
   s.add_runtime_dependency 'fog-aws',           '~> 3.3'
-  s.add_runtime_dependency 'rest-client',       '1.8.0'
+  s.add_runtime_dependency 'rest-client',       '2.0.2'
   s.add_runtime_dependency 'right_aws',         '3.1.0'
 
   s.add_development_dependency 'bundler',                   '~> 1.7'
