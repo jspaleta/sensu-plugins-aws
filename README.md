@@ -286,6 +286,22 @@ The Sensu assets packaged from this repository are built against the Sensu Ruby 
   }
 }
 ```
+
+**metrics-kinesis.rb**
+`
+
+```
+metrics-kinesis.rb --help
+Usage: ./metrics-kinesis.rb (options)
+    -r, --region REGION              AWS Region (defaults to us-east-1).
+    -t, --end-time TIME              CloudWatch metric statistics end time
+    -f, --fetch_age AGE              How long ago (in seconds) to fetch metrics for
+    -p, --period SECONDS             CloudWatch metric statistics period
+    -s, --scheme SCHEME              Metric naming scheme, text to prepend to metric default: (default: aws.kinesis)
+    -n, --name STREAM_NAME           Name of the Kinetics stream
+```
+
+
 ## Installation
 
 [Installation and Setup](http://sensu-plugins.io/docs/installation_instructions.html)

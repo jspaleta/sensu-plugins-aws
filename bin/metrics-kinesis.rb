@@ -3,7 +3,7 @@
 # elb-metrics
 #
 # DESCRIPTION:
-#   Gets kinetics metrics from CloudWatch and puts them in Graphite for longer term storage
+#   Gets kinesis metrics from CloudWatch and puts them in Graphite for longer term storage
 #
 # OUTPUT:
 #   metric-data
@@ -41,10 +41,10 @@ class KineticsMetrics < Sensu::Plugin::Metric::CLI::Graphite
          long: '--name STREAM_NAME'
 
   option :scheme,
-         description: 'Metric naming scheme, text to prepend to metric',
+         description: 'Metric naming scheme, text to prepend to metric (default: aws.kinesis)',
          short: '-s SCHEME',
          long: '--scheme SCHEME',
-         default: 'aws.kinetics'
+         default: 'aws.kinesis'
 
   option :fetch_age,
          description: 'How long ago (in seconds) to fetch metrics for',
