@@ -77,7 +77,6 @@ class KineticsMetrics < Sensu::Plugin::Metric::CLI::Graphite
     @cloud_watch = Aws::CloudWatch::Client.new
   end
 
-
   def cloud_watch_metric(metric_name, stats, stream_name)
     request = {
       namespace: 'AWS/Kinesis',
@@ -91,59 +90,45 @@ class KineticsMetrics < Sensu::Plugin::Metric::CLI::Graphite
       start_time: config[:end_time] - config[:fetch_age] - config[:period],
       end_time: config[:end_time] - config[:fetch_age],
 
-#      start_time: Time.now - config[:period] * 10,
-#      end_time: Time.now,
       period: config[:period],
       statistics: stats,
       unit: config[:unit]
     }
     cloud_watch.get_metric_statistics(request)
-
   end
 
   def underscore(camel_cased_word)
-     camel_cased_word.to_s.gsub(/::/, '/').
-       gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
-       gsub(/([a-z\d])([A-Z])/,'\1_\2').
-       tr("-", "_").
-       downcase
+    camel_cased_word.to_s.gsub(/::/, '/').gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2').gsub(/([a-z\d])([A-Z])/, '\1_\2').tr('-', '_').downcase
   end
 
-  def print_statistics(stream_name, statistics,metrics)
+  def print_statistics(stream_name, statistics, metrics)
     result = {}
     timestamp = {}
     static_value = {}
     metrics.each do |key|
       r = cloud_watch_metric(key, statistics, stream_name)
-      puts r
       unless r[:datapoints][0].nil?
         statistics.each do |static|
           keys = if config[:scheme] == ''
-                  []
-                else
-                  [config[:scheme]]
-                end
+                   []
+                 else
+                   [config[:scheme]]
+                 end
           keys.concat [stream_name, underscore(key), underscore(static)]
           metric_key = keys.join('.')
           static_value[metric_key] = static
-          result[metric_key] = r[:datapoints][0][underscore(static)] 
-          timestamp[metric_key] = r[:datapoints][0][:timestamp] 
+          result[metric_key] = r[:datapoints][0][underscore(static)]
+          timestamp[metric_key] = r[:datapoints][0][:timestamp]
         end
       end
     end
     result.each do |key, value|
-      output key.to_s, value, timestamp[key].to_i 
+      output key.to_s, value, timestamp[key].to_i
     end
   end
 
   def run
-    stats = [
-     'Minimum',
-     'Maximum',
-     'Average',
-     'Sum',
-     'SampleCount'
-    ]
+    stats = %w[Minimum Maximum Average Sum SampleCount]
     metrics = [
       'GetRecords.Bytes',
       'GetRecords.IteratorAgeMilliseconds',
@@ -170,7 +155,7 @@ class KineticsMetrics < Sensu::Plugin::Metric::CLI::Graphite
     ]
 
     begin
-      print_statistics(config[:streamname], stats,metrics)
+      print_statistics(config[:streamname], stats, metrics)
       ok
     end
   end
