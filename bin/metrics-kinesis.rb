@@ -21,7 +21,7 @@
 #   #YELLOW
 #
 # NOTES:
-#   Returns a set of Kinetics statistics for a given stream name.  You can specify any valid Kinetic metric type, see
+#   Returns a set of Kinesis statistics for a given stream name.  You can specify any valid Kinesis metric type, see
 #   https://docs.aws.amazon.com/streams/latest/dev/monitoring-with-cloudwatch.html
 #
 # LICENSE:
@@ -33,10 +33,10 @@ require 'aws-sdk'
 require 'sensu-plugins-aws'
 require 'time'
 
-class KineticsMetrics < Sensu::Plugin::Metric::CLI::Graphite
+class KinesisMetrics < Sensu::Plugin::Metric::CLI::Graphite
   include Common
   option :streamname,
-         description: 'Name of the Kinetics stream',
+         description: 'Name of the Kinesis stream (required)',
          short: '-n STREAM_NAME',
          long: '--name STREAM_NAME'
 
@@ -47,7 +47,7 @@ class KineticsMetrics < Sensu::Plugin::Metric::CLI::Graphite
          default: 'aws.kinesis'
 
   option :fetch_age,
-         description: 'How long ago (in seconds) to fetch metrics for',
+         description: 'How long ago (in seconds) to fetch metrics for (default: 60)',
          short: '-f AGE',
          long: '--fetch_age',
          default: 60,
@@ -56,7 +56,7 @@ class KineticsMetrics < Sensu::Plugin::Metric::CLI::Graphite
   option :aws_region,
          short: '-r AWS_REGION',
          long: '--region REGION',
-         description: 'AWS Region (defaults to us-east-1).',
+         description: 'AWS Region (default: us-east-1)',
          default: ENV['AWS_REGION']
 
   option :end_time,
@@ -64,14 +64,14 @@ class KineticsMetrics < Sensu::Plugin::Metric::CLI::Graphite
          long:        '--end-time TIME',
          default:     Time.now,
          proc:        proc { |a| Time.parse a },
-         description: 'CloudWatch metric statistics end time'
+         description: 'CloudWatch metric statistics end time (default: Time.now)'
 
   option :period,
          short:       '-p N',
          long:        '--period SECONDS',
          default:     60,
          proc:        proc(&:to_i),
-         description: 'CloudWatch metric statistics period'
+         description: 'CloudWatch metric statistics period (default: 60)'
 
   def cloud_watch
     @cloud_watch = Aws::CloudWatch::Client.new

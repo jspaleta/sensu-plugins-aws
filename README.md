@@ -288,17 +288,17 @@ The Sensu assets packaged from this repository are built against the Sensu Ruby 
 ```
 
 **metrics-kinesis.rb**
-`
+`metrics-kinesis.rb` can be used to produce stream-level CloudWatch metrics for a specific time period. The duration of the time period is set using the `--period` option, while the start/end of the time period is set by providing a datetime string to `--end-time` or providing an offset in seconds to `--fetch-age`. 
 
 ```
 metrics-kinesis.rb --help
 Usage: ./metrics-kinesis.rb (options)
-    -r, --region REGION              AWS Region (defaults to us-east-1).
-    -t, --end-time TIME              CloudWatch metric statistics end time
-    -f, --fetch_age AGE              How long ago (in seconds) to fetch metrics for
-    -p, --period SECONDS             CloudWatch metric statistics period
+    -r, --region REGION              AWS Region (default: us-east-1)
+    -t, --end-time TIME              CloudWatch metric statistics end time (default: Time.now)
+    -f, --fetch_age AGE              How long ago (in seconds) to fetch metrics for (default: 60)
+    -p, --period SECONDS             CloudWatch metric statistics period (default: 60)
     -s, --scheme SCHEME              Metric naming scheme, text to prepend to metric default: (default: aws.kinesis)
-    -n, --name STREAM_NAME           Name of the Kinetics stream
+    -n, --name STREAM_NAME           Name of the Kinesis stream (required)
 ```
 
 
